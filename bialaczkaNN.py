@@ -7,6 +7,6 @@ my_data = genfromtxt(training_path + 'training_l2type.csv', delimiter=';')
 # lines = open(training_path + 'training_bazofilowa.csv', "r").readlines()
 # print(lines)
 # Sigmoid Function
-print(my_data)
+print(my_data[0][1])
 # print(my_data[0])
 # Sigmoid Function Derivative
