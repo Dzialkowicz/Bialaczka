@@ -48,11 +48,47 @@ output_arr = np.expand_dims(output_transposed, axis = 1) #adding additional dime
 #print(all_training_data.shape)
 #print(output_transposed1.shape)
 
-plt.matshow(np.hstack((all_training_data, output_arr)), 10, cmap-plt.cm.gray)
-plt.show()
-# lines = open(training_path + 'training_bazofilowa.csv', "r").readlines()
-# print(lines)
-# Sigmoid Function
+#How data looks on an image
+#plt.matshow(np.hstack((all_training_data, output_arr)), fignum = 1, cmap = plt.cm.gray)
+#plt.show()
+
+# Nonlinear Sigmoid Function - needed for training the weights
+# Sigmoid Function Derivative - if passed true
+def nonlin(x, deriv = False):
+    if deriv == True:
+        return x*(1-x)
+    return 1/(1+np.exp(-x))
 
 
-# Sigmoid Function Derivative
+
+
+#Showing that sigmoid function actually works
+#Xaxis = np.arange(-10, 10, 0.5)
+#plt.plot(Xaxis, nonlin(Xaxis))
+#plt.show()
+
+# Random seed for initial weights values (most primitive method but efficient)
+np.random.seed(1)
+#Initializing weights
+syn0 = 2*np.random.random((20,1)) - 1
+
+# Iterating 10 000 times
+for x in range(100):
+
+    # forward propagation
+    first_layer = all_training_data
+    # multiplying inputs with given weights
+    output_layer = nonlin(np.dot(first_layer, syn0))
+
+    # how big error we have?
+    output_layer_error = output_arr - output_layer
+
+    #back propagation
+    #multiply how much we missed by slope of the sigmoid derivative -
+    output_layer_delta = output_layer_error * nonlin(output_layer, True)
+
+    #updating weights
+    syn0 += np.dot(first_layer.T, output_layer_delta)
+
+print("Output: ")
+print(output_layer)
