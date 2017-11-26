@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from numpy import genfromtxt
 # Input Array
 # Output Array
@@ -52,6 +53,52 @@ all_training_data.append(wielokapilarnokomorkowa) #19
 # second cell - single row from type
 # third cell - one value from row
 # print(all_training_data[1][2][3])
+
+#Create output array
+output_array = []
+for x in bazofilowa:
+    output_array.append(0)
+for x in bialaczka_komorek_wielkojadrzastych:
+    output_array.append(1)
+for x in chloniak_limfatyczny:
+    output_array.append(2)
+for x in cytolukemia:
+    output_array.append(3)
+for x in differentiation_in_part:
+    output_array.append(4)
+for x in differentiation:
+    output_array.append(5)
+for x in eozyrofilowa:
+    output_array.append(6)
+for x in granula_mononuclear:
+    output_array.append(7)
+for x in granulocylosis:
+    output_array.append(8)
+for x in granulocyte:
+    output_array.append(9)
+for x in l2type:
+    output_array.append(10)
+for x in ltype:
+    output_array.append(11)
+for x in lymphocytic:
+    output_array.append(12)
+for x in mielomonocytarna:
+    output_array.append(13)
+for x in mlemonoblastyczna:
+    output_array.append(14)
+for x in monoblastyczna:
+    output_array.append(15)
+for x in monocytarna:
+    output_array.append(16)
+for x in plazmocytowa:
+    output_array.append(17)
+for x in subacute_granulocyte:
+    output_array.append(18)
+for x in wielokapilarnokomorkowa:
+    output_array.append(19)
+print(output_array)
+print(len(output_array))
+
 
 # lines = open(training_path + 'training_bazofilowa.csv', "r").readlines()
 # print(lines)
