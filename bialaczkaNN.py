@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from numpy import genfromtxt
 import scipy.stats as stats
-from sklearn.feature_selection import VarianceThreshold
 # Input Array
 # Output Array
 training_path = '/Users/jakubsanecki/Desktop/bialaczka/Bialaczki_dane/'
@@ -45,9 +44,9 @@ all_training_data = np.concatenate((bazofilowa, bialaczka_komorek_wielkojadrzast
 #Getting feature for Kolomogorow
 all_training_data_T = all_training_data.T
 #for i in range(20):
-print(all_training_data_T[0])
-kolomog = stats.kstest(all_training_data_T[0], 'norm')
-print(kolomog)
+    #print(all_training_data_T[0])
+    #kolomog = stats.kstest(all_training_data_T[0], 'norm')
+#print(kolomog)
 #1. cecha = 0.70586087510080098
 #2. 0.63055865981823633
 #3. 0.69146246127401312
@@ -84,25 +83,44 @@ def nonlin(x, deriv = False):
 # Random seed for initial weights values (most primitive method but efficient)
 np.random.seed(1)
 #Initializing weights
-syn0 = 2*np.random.random((20,1)) - 1
-
+syn0 = 2*np.random.random((18,19)) - 1
+syn1 = 2*np.random.random((19,1)) - 1
+print(syn0.shape)
+print(syn1.shape)
 # Iterating 10 000 times
-for x in range(10000):
+for j in range(60000):
 
     # forward propagation
     first_layer = all_training_data
     # multiplying inputs with given weights
-    output_layer = nonlin(np.dot(first_layer, syn0))
+    hidden_layer = nonlin(np.dot(first_layer, syn0))
+    # multiplying inputs with given weights
+    output_layer = nonlin(np.dot(hidden_layer, syn1))
+
+    #print(hidden_layer.shape)
+    #print(first_layer.shape)
+    #print(output_layer.shape)
 
     # how big error we have?
     output_layer_error = output_arr - output_layer
-
+    #Output layer error for each every 10000 iters.
+    if(j% 10000) == 0:
+        print "Error: " + str(np.mean(np.abs(output_layer_error)))
     #back propagation
     #multiply how much we missed by slope of the sigmoid derivative -
-    output_layer_delta = output_layer_error * nonlin(output_layer, True)
+    # in what direction is the target value?
+    # were we really sure? if so, don't change too much.
+    output_layer_delta = output_layer_error * nonlin(output_layer,deriv=True)
+
+    # how much did each l1 value contribute to the l2 error (according to the weights)?
+    hidden_layer_error = output_layer_delta.dot(hidden_layer.T)
+
+    hidden_layer_delta = hidden_layer_error * nonlin(hidden_layer, deriv=True)
 
     #updating weights
-    syn0 += np.dot(first_layer.T, output_layer_delta)
-
-#print("Output: ")
-#print(output_layer)
+    #syn0 += np.dot(l0.T,l1_delta)
+    #syn0 += np.dot(first_layer.T, output_layer_delta)
+    syn1 += hidden_layer.T.dot(output_layer_delta)
+    syn0 += first_layer.T.dot(hidden_layer_delta)
+print("Output: ")
+print(output_layer)
