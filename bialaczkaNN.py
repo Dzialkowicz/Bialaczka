@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy import genfromtxt
+import scipy.stats as stats
+from sklearn.feature_selection import VarianceThreshold
 # Input Array
 # Output Array
 training_path = '/Users/jakubsanecki/Desktop/bialaczka/Bialaczki_dane/'
@@ -40,13 +42,25 @@ all_training_data = np.concatenate((bazofilowa, bialaczka_komorek_wielkojadrzast
 # third cell - one value from row
 #print(all_training_data)
 
+#Getting feature for Kolomogorow
+all_training_data_T = all_training_data.T
+#for i in range(20):
+print(all_training_data_T[0])
+kolomog = stats.kstest(all_training_data_T[0], 'norm')
+print(kolomog)
+#1. cecha = 0.70586087510080098
+#2. 0.63055865981823633
+#3. 0.69146246127401312
+#4. 0.54973822483011292
+#5  0.69146246127401312
+#6
 
 output_transposed = data_output.T # transposed output array
 output_arr = np.expand_dims(output_transposed, axis = 1) #adding additional dimension so te arrays can be caluclated
 
+
 #print(output_transposed.shape)
 #print(all_training_data.shape)
-#print(output_transposed1.shape)
 
 #How data looks on an image
 #plt.matshow(np.hstack((all_training_data, output_arr)), fignum = 1, cmap = plt.cm.gray)
@@ -73,7 +87,7 @@ np.random.seed(1)
 syn0 = 2*np.random.random((20,1)) - 1
 
 # Iterating 10 000 times
-for x in range(100):
+for x in range(10000):
 
     # forward propagation
     first_layer = all_training_data
@@ -90,5 +104,5 @@ for x in range(100):
     #updating weights
     syn0 += np.dot(first_layer.T, output_layer_delta)
 
-print("Output: ")
-print(output_layer)
+#print("Output: ")
+#print(output_layer)
